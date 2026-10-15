@@ -1,68 +1,101 @@
+<!-- Déclaration du type de document HTML5 -->
 <!DOCTYPE html>
+<!-- Page en français -->
 <html lang="fr">
 <head>
+  <!-- Encodage UTF-8 pour les accents et emojis -->
   <meta charset="UTF-8">
+  <!-- Adaptation de la page aux écrans mobiles -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Titre de l'onglet du navigateur -->
   <title>NovaBank — Accueil</title>
+  <!-- Feuille de style du site -->
   <link rel="stylesheet" href="css/style.css">
 </head>
+<!-- Identifie la page "accueil" pour mettre le bon lien en surbrillance dans le menu -->
 <body data-page="accueil">
+  <!-- Emplacement du header, rempli automatiquement par app.js -->
   <div id="header"></div>
 
   <main>
+    <!-- Section d'accueil (hero) : message d'accroche et visuel de carte bancaire -->
     <section class="hero">
       <div class="container hero-grid">
         <div>
+          <!-- Petit badge indiquant le type d'application -->
           <span class="badge"><span class="dot"></span> Application cloud-native</span>
+          <!-- Titre principal ; le mot en "grad" reçoit un dégradé de couleur -->
           <h1>La banque <span class="grad">simple, rapide</span> et conteneurisée.</h1>
+          <!-- Texte d'introduction décrivant les technologies utilisées -->
           <p class="lead">Ouvrez un compte, déposez, retirez et suivez chaque transaction. Propulsé par Docker, Flask, MySQL et Nginx.</p>
           <div class="hero-actions">
+            <!-- Accès direct à la création de compte (?nouveau=1 ouvre la modale) -->
             <a href="comptes.html?nouveau=1" class="btn btn-primary">Ouvrir un compte →</a>
+            <!-- Accès à la page des opérations -->
             <a href="operations.html" class="btn btn-ghost">Faire une opération</a>
           </div>
         </div>
+        <!-- Illustration décorative d'une carte bancaire -->
         <div class="card-visual">
           <div class="bank-card">
+            <!-- Ligne du haut : puce et nom de la banque -->
             <div style="display:flex;justify-content:space-between;align-items:center">
               <div class="chip"></div><b>NovaBank</b>
             </div>
+            <!-- Faux numéro de carte (purement décoratif) -->
             <div class="num">•••• •••• •••• 4821</div>
+            <!-- Ligne du bas : titulaire et date d'expiration fictifs -->
             <div class="row"><span>TITULAIRE<br><b>VOTRE NOM</b></span><span>EXP<br><b>12/29</b></span></div>
           </div>
         </div>
       </div>
     </section>
 
+    <!-- Section des statistiques globales -->
     <section class="section" style="padding-top:20px">
       <div class="container">
         <div class="grid grid-3">
+          <!-- Nombre de comptes ouverts ; la valeur est remplie par accueil.js -->
           <div class="card reveal"><div class="stat"><span class="label">Comptes ouverts</span><span class="value grad" id="statComptes">0</span></div></div>
+          <!-- Somme des soldes de tous les comptes -->
           <div class="card reveal"><div class="stat"><span class="label">Solde total</span><span class="value grad" id="statSolde">0 $</span></div></div>
+          <!-- Solde moyen par compte -->
           <div class="card reveal"><div class="stat"><span class="label">Solde moyen</span><span class="value grad" id="statMoyen">0 $</span></div></div>
         </div>
       </div>
     </section>
 
+    <!-- Section présentant les fonctions bancaires disponibles -->
     <section class="section">
       <div class="container">
+        <!-- Titre et description de la section -->
         <div class="section-head reveal">
           <h2>Tout ce dont vous avez besoin</h2>
           <p>Les cinq fonctions bancaires essentielles, accessibles en un clic.</p>
         </div>
         <div class="grid grid-3">
+          <!-- Carte cliquable : création de compte -->
           <a href="comptes.html?nouveau=1" class="card hover reveal"><div class="card-icon">➕</div><h3>creerCompte</h3><p>Ouvrez un nouveau compte avec un solde initial en quelques secondes.</p></a>
+          <!-- Carte cliquable : dépôt d'argent -->
           <a href="operations.html" class="card hover reveal"><div class="card-icon">💰</div><h3>deposerArgent</h3><p>Créditez votre compte instantanément, avec traçabilité complète.</p></a>
+          <!-- Carte cliquable : retrait d'argent -->
           <a href="operations.html" class="card hover reveal"><div class="card-icon">💸</div><h3>retirerArgent</h3><p>Retirez des fonds avec vérification automatique du solde disponible.</p></a>
+          <!-- Carte cliquable : consultation du compte et de son historique -->
           <a href="historique.html" class="card hover reveal"><div class="card-icon">🔍</div><h3>consulterCompte</h3><p>Consultez le solde et l'historique détaillé de chaque transaction.</p></a>
+          <!-- Carte cliquable : suppression de compte -->
           <a href="comptes.html" class="card hover reveal"><div class="card-icon">🗑️</div><h3>effacerCompte</h3><p>Fermez un compte en toute sécurité avec confirmation préalable.</p></a>
+          <!-- Carte cliquable : page d'architecture technique -->
           <a href="apropos.html" class="card hover reveal"><div class="card-icon">🐳</div><h3>Architecture Docker</h3><p>Découvrez comment les conteneurs communiquent entre eux.</p></a>
         </div>
       </div>
     </section>
   </main>
 
+  <!-- Emplacement du footer, rempli automatiquement par app.js -->
   <div id="footer"></div>
+  <!-- Fonctions communes (header, footer, API, utilitaires) -->
   <script src="js/app.js"></script>
+  <!-- Logique propre à la page Accueil (statistiques animées) -->
   <script src="js/accueil.js"></script>
 </body>
 </html>

@@ -1,52 +1,88 @@
+# Définition de tous les services (conteneurs) qui composent l'application bancaire
 services:
+
+  # ---------- Service 1 : la base de données MySQL ----------
   db:
+    # Image officielle MySQL version 8.0, téléchargée depuis Docker Hub
     image: mysql:8.0
+    # Nom fixe donné au conteneur (au lieu d'un nom aléatoire généré par Docker)
     container_name: banque-db
+    # Redémarre automatiquement le conteneur sauf si je l'arrête manuellement
     restart: unless-stopped
     environment:
+      # Mot de passe du compte root de MySQL, lu depuis le fichier .env
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      # Nom de la base créée automatiquement au premier démarrage, lu depuis .env
       MYSQL_DATABASE: ${DB_NAME}
     volumes:
+      # Volume nommé qui conserve les données MySQL même si le conteneur est supprimé
       - mysql_data:/var/lib/mysql
+      # Fichier SQL copié dans le dossier d'initialisation : il est exécuté une seule fois
+      # au premier démarrage pour créer les tables (comptes et transactions)
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
+      # Commande qui vérifie que MySQL répond correctement (mysqladmin ping)
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${DB_ROOT_PASSWORD}"]
+      # Je lance cette vérification toutes les 5 secondes
       interval: 5s
+      # Si la commande ne répond pas en 5 secondes, elle est considérée comme échouée
       timeout: 5s
+      # Je tente jusqu'à 20 fois avant de considérer MySQL comme défaillant
       retries: 20
     networks:
+      # Le conteneur est connecté au réseau privé banque-net pour communiquer avec les autres services
       - banque-net
 
+  # ---------- Service 2 : l'API Flask (la logique métier) ----------
   api:
+    # Construit l'image à partir du Dockerfile présent dans le dossier ./app
     build: ./app
+    # Nom et version donnés à l'image construite (utile pour la publier sur Docker Hub)
     image: ${DOCKERHUB_USER}/banque-api:1.0
     container_name: banque-api
     restart: unless-stopped
     environment:
+      # Adresse de la base de données : "db" est le nom du service MySQL,
+      # Docker le résout automatiquement en adresse IP sur le réseau banque-net
       DB_HOST: db
+      # Utilisateur utilisé par l'API pour se connecter à MySQL
       DB_USER: root
+      # Mot de passe de connexion à MySQL, lu depuis .env
       DB_PASSWORD: ${DB_ROOT_PASSWORD}
+      # Nom de la base de données à utiliser, lu depuis .env
       DB_NAME: ${DB_NAME}
     depends_on:
       db:
+        # L'API ne démarre qu'une fois que MySQL a passé son healthcheck (donc qu'il est prêt)
         condition: service_healthy
     networks:
       - banque-net
 
+  # ---------- Service 3 : le serveur web nginx (front-end + passerelle) ----------
   web:
+    # Construit l'image à partir du Dockerfile présent dans le dossier ./nginx
     build: ./nginx
+    # Nom et version donnés à l'image construite
     image: ${DOCKERHUB_USER}/banque-nginx:1.0
     container_name: banque-web
     restart: unless-stopped
     ports:
+      # Redirige le port 80 de ma machine vers le port 80 du conteneur :
+      # on accède au site en tapant http://localhost dans le navigateur
       - "80:80"
     depends_on:
+      # nginx démarre après l'API, car il doit pouvoir lui transmettre les requêtes /api/
       - api
     networks:
       - banque-net
 
+# ---------- Volumes nommés ----------
 volumes:
+  # Déclare le volume mysql_data utilisé par le service db pour stocker les données de façon persistante
   mysql_data:
 
+# ---------- Réseaux ----------
 networks:
+  # Déclare le réseau privé banque-net. Par défaut, Docker crée un réseau de type "bridge"
+  # qui isole ces trois conteneurs du reste de la machine tout en leur permettant de se parler
   banque-net:

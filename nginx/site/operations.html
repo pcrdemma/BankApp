@@ -1,45 +1,68 @@
+<!-- Déclaration du type de document HTML5 -->
 <!DOCTYPE html>
+<!-- Page en français -->
 <html lang="fr">
 <head>
+  <!-- Encodage UTF-8 pour les accents et emojis -->
   <meta charset="UTF-8">
+  <!-- Adaptation de la page aux écrans mobiles -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Titre de l'onglet du navigateur -->
   <title>NovaBank — Opérations</title>
+  <!-- Feuille de style du site -->
   <link rel="stylesheet" href="css/style.css">
 </head>
+<!-- Identifie la page "operations" pour mettre le bon lien en surbrillance dans le menu -->
 <body data-page="operations">
+  <!-- Emplacement du header, rempli automatiquement par app.js -->
   <div id="header"></div>
 
   <main>
+    <!-- Bandeau de titre de la page -->
     <div class="page-banner">
       <div class="container">
+        <!-- Fil d'Ariane pour revenir à l'accueil -->
         <div class="breadcrumb"><a href="index.html">Accueil</a> / Opérations</div>
         <h2>Dépôts et retraits</h2>
         <p class="muted">Sélectionnez un compte puis effectuez votre opération.</p>
       </div>
     </div>
 
+    <!-- Section principale : formulaire d'opération et affichage du solde -->
     <section class="section" style="padding-top:40px">
       <div class="container op-layout">
+        <!-- Formulaire de dépôt ou de retrait -->
         <div class="card">
+          <!-- Onglets pour choisir le type d'opération -->
           <div class="tabs">
+            <!-- Sélectionne le dépôt (active par défaut) -->
             <button class="tab active" id="tabDepot" onclick="setType('depot')">💰 Dépôt</button>
+            <!-- Sélectionne le retrait -->
             <button class="tab" id="tabRetrait" onclick="setType('retrait')">💸 Retrait</button>
           </div>
+          <!-- Liste déroulante des comptes, remplie par operations.js -->
           <div class="field"><label>Compte</label><select class="input" id="compteSel"></select></div>
+          <!-- Champ du montant, minimum 0.01 $ -->
           <div class="field"><label>Montant</label><div class="input-money"><input class="input" id="montant" type="number" min="0.01" step="0.01" placeholder="0.00"></div></div>
+          <!-- Boutons de montants prédéfinis pour remplir rapidement le champ -->
           <div class="quick">
             <button class="chip-btn" onclick="setMontant(20)">20 $</button>
             <button class="chip-btn" onclick="setMontant(50)">50 $</button>
             <button class="chip-btn" onclick="setMontant(100)">100 $</button>
             <button class="chip-btn" onclick="setMontant(500)">500 $</button>
           </div>
+          <!-- Valide l'opération ; le libellé et la couleur changent selon le type choisi -->
           <button class="btn btn-success btn-block" id="btnValider" onclick="valider()">Valider le dépôt</button>
         </div>
 
+        <!-- Encadré affichant le solde du compte sélectionné -->
         <div>
           <div class="balance-box">
+            <!-- Nom du titulaire, mis à jour par operations.js -->
             <div class="label" id="soldeNom">Sélectionnez un compte</div>
+            <!-- Solde du compte, mis à jour par operations.js -->
             <div class="big" id="soldeVal">— $</div>
+            <!-- Lien vers l'historique du compte (adresse mise à jour par operations.js) -->
             <a class="btn btn-ghost btn-sm" id="lienHisto" href="historique.html">Voir l'historique →</a>
           </div>
         </div>
@@ -47,8 +70,11 @@
     </section>
   </main>
 
+  <!-- Emplacement du footer, rempli automatiquement par app.js -->
   <div id="footer"></div>
+  <!-- Fonctions communes (header, footer, API, utilitaires) -->
   <script src="js/app.js"></script>
+  <!-- Logique propre à la page Opérations (dépôt, retrait, mise à jour du solde) -->
   <script src="js/operations.js"></script>
 </body>
 </html>

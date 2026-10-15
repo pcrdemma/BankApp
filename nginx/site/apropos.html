@@ -1,63 +1,95 @@
+<!-- Déclaration du type de document : indique au navigateur que c'est une page HTML5 -->
 <!DOCTYPE html>
+<!-- Balise racine de la page, en français (utile pour les lecteurs d'écran et le référencement) -->
 <html lang="fr">
 <head>
+  <!-- Encodage UTF-8 pour afficher correctement les accents et les emojis -->
   <meta charset="UTF-8">
+  <!-- Rend la page adaptable aux écrans mobiles (responsive) -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Titre affiché dans l'onglet du navigateur -->
   <title>NovaBank — Architecture</title>
+  <!-- Feuille de style principale du site -->
   <link rel="stylesheet" href="css/style.css">
 </head>
+<!-- data-page="apropos" permet à app.js de savoir quelle page est active pour mettre en surbrillance le menu -->
 <body data-page="apropos">
+  <!-- Emplacement vide : app.js y injecte automatiquement le header (logo + menu) -->
   <div id="header"></div>
 
+  <!-- Contenu principal de la page -->
   <main>
+    <!-- Bandeau du haut de page avec le titre -->
     <div class="page-banner">
       <div class="container">
+        <!-- Fil d'Ariane : permet de revenir à l'accueil -->
         <div class="breadcrumb"><a href="index.html">Accueil</a> / Architecture</div>
         <h2>Architecture technique</h2>
         <p class="muted">Trois conteneurs Docker orchestrés par Docker Compose.</p>
       </div>
     </div>
 
+    <!-- Section présentant le schéma du flux d'une requête -->
     <section class="section">
       <div class="container">
+        <!-- Titre de section ; la classe "reveal" fait apparaître l'élément au défilement -->
         <div class="section-head reveal">
           <h2>Flux d'une requête</h2>
           <p>Le navigateur ne parle qu'à Nginx, qui redirige les appels API vers Flask, lequel interroge MySQL.</p>
         </div>
+        <!-- Schéma horizontal : Navigateur → Nginx → Flask → MySQL -->
         <div class="flow reveal">
+          <!-- Étape 1 : le navigateur de l'utilisateur -->
           <div class="node"><span class="em">🌐</span><b>Navigateur</b><small>HTML / CSS / JS</small></div>
           <div class="arrow">→</div>
+          <!-- Étape 2 : Nginx reçoit la requête sur le port 80 -->
           <div class="node"><span class="em">⚡</span><b>Nginx</b><small>Port 80 · Proxy</small></div>
           <div class="arrow">→</div>
+          <!-- Étape 3 : Flask traite la logique métier sur le port 5000 -->
           <div class="node"><span class="em">🐍</span><b>Flask API</b><small>Port 5000 · Gunicorn</small></div>
           <div class="arrow">→</div>
+          <!-- Étape 4 : MySQL stocke et renvoie les données -->
           <div class="node"><span class="em">🐬</span><b>MySQL</b><small>Port 3306 · Volume</small></div>
         </div>
       </div>
     </section>
 
+    <!-- Section présentant les trois conteneurs sous forme de cartes -->
     <section class="section" style="padding-top:0">
       <div class="container">
+        <!-- Grille de 3 colonnes -->
         <div class="grid grid-3">
+          <!-- Carte du conteneur Nginx -->
           <div class="card reveal"><div class="card-icon">⚡</div><h3>Conteneur Nginx</h3><p>Sert les pages statiques et agit comme reverse proxy : toute requête <code>/api/</code> est transmise au conteneur Flask.</p></div>
+          <!-- Carte du conteneur Flask -->
           <div class="card reveal"><div class="card-icon">🐍</div><h3>Conteneur Flask</h3><p>API REST qui implémente les 5 fonctions bancaires et communique avec MySQL par le réseau Docker.</p></div>
+          <!-- Carte du conteneur MySQL -->
           <div class="card reveal"><div class="card-icon">🐬</div><h3>Conteneur MySQL</h3><p>Stocke comptes et transactions. Un volume nommé garantit la persistance des données.</p></div>
         </div>
       </div>
     </section>
 
+    <!-- Section listant les routes disponibles de l'API -->
     <section class="section" style="padding-top:0">
       <div class="container">
         <div class="section-head reveal"><h2>Points d'accès de l'API</h2></div>
+        <!-- Conteneur permettant un défilement horizontal du tableau sur petit écran -->
         <div class="table-wrap reveal">
           <table>
+            <!-- En-têtes des colonnes -->
             <thead><tr><th>Fonction</th><th>Méthode</th><th>Route</th></tr></thead>
             <tbody>
+              <!-- Création d'un compte : requête POST car on envoie des données -->
               <tr><td><b>creerCompte</b></td><td><span class="pill depot">POST</span></td><td><code>/api/comptes</code></td></tr>
+              <!-- Consultation d'un compte : requête GET car on lit des données -->
               <tr><td><b>consulterCompte</b></td><td><span class="pill" style="background:var(--primary-soft);color:var(--primary)">GET</span></td><td><code>/api/comptes/{id}</code></td></tr>
+              <!-- Dépôt d'argent : POST car on modifie le solde -->
               <tr><td><b>deposerArgent</b></td><td><span class="pill depot">POST</span></td><td><code>/api/comptes/{id}/depot</code></td></tr>
+              <!-- Retrait d'argent : POST car on modifie le solde -->
               <tr><td><b>retirerArgent</b></td><td><span class="pill depot">POST</span></td><td><code>/api/comptes/{id}/retrait</code></td></tr>
+              <!-- Suppression d'un compte : DELETE -->
               <tr><td><b>effacerCompte</b></td><td><span class="pill retrait">DELETE</span></td><td><code>/api/comptes/{id}</code></td></tr>
+              <!-- Consultation de l'historique : GET car on lit des données -->
               <tr><td><b>historique</b></td><td><span class="pill" style="background:var(--primary-soft);color:var(--primary)">GET</span></td><td><code>/api/comptes/{id}/historique</code></td></tr>
             </tbody>
           </table>
@@ -65,17 +97,21 @@
       </div>
     </section>
 
+    <!-- Section présentant les commandes de déploiement -->
     <section class="section" style="padding-top:0">
       <div class="container">
         <div class="section-head reveal"><h2>Déploiement</h2></div>
-        <pre class="code reveal">docker compose up -d --build
-docker compose ps
-docker compose push</pre>
+        <!-- Bloc de code affichant les commandes Docker à exécuter -->
+        <pre class="code reveal">docker compose up -d --build   <!-- construit les images et lance les conteneurs en arrière-plan -->
+docker compose ps             <!-- affiche l'état des conteneurs -->
+docker compose push           <!-- envoie les images sur Docker Hub --></pre>
       </div>
     </section>
   </main>
 
+  <!-- Emplacement vide : app.js y injecte automatiquement le footer -->
   <div id="footer"></div>
+  <!-- Script principal chargé en dernier pour ne pas ralentir l'affichage de la page -->
   <script src="js/app.js"></script>
 </body>
 </html>

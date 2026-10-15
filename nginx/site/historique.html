@@ -1,39 +1,60 @@
+<!-- Déclaration du type de document HTML5 -->
 <!DOCTYPE html>
+<!-- Page en français -->
 <html lang="fr">
 <head>
+  <!-- Encodage UTF-8 pour les accents et emojis -->
   <meta charset="UTF-8">
+  <!-- Adaptation de la page aux écrans mobiles -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Titre de l'onglet du navigateur -->
   <title>NovaBank — Historique</title>
+  <!-- Feuille de style du site -->
   <link rel="stylesheet" href="css/style.css">
 </head>
+<!-- Identifie la page "historique" pour mettre le bon lien en surbrillance dans le menu -->
 <body data-page="historique">
+  <!-- Emplacement du header, rempli automatiquement par app.js -->
   <div id="header"></div>
 
   <main>
+    <!-- Bandeau de titre de la page -->
     <div class="page-banner">
       <div class="container">
+        <!-- Fil d'Ariane pour revenir à l'accueil -->
         <div class="breadcrumb"><a href="index.html">Accueil</a> / Historique</div>
         <h2>Historique des transactions</h2>
         <p class="muted">Consultez toutes les opérations d'un compte.</p>
       </div>
     </div>
 
+    <!-- Section principale : sélection du compte, statistiques et tableau -->
     <section class="section" style="padding-top:40px">
       <div class="container">
+        <!-- Barre d'outils : choix du compte et lien vers la page d'opérations -->
         <div class="toolbar">
+          <!-- Liste déroulante des comptes, remplie par historique.js -->
           <select class="input search" id="compteSel"></select>
+          <!-- Lien vers la page d'opérations (son adresse est mise à jour par historique.js) -->
           <a class="btn btn-primary" id="lienOperer" href="operations.html">Faire une opération</a>
         </div>
 
+        <!-- Trois cartes de statistiques : solde, total des dépôts, total des retraits -->
         <div class="grid grid-3" style="margin-bottom:26px">
+          <!-- Solde actuel du compte sélectionné -->
           <div class="card"><div class="stat"><span class="label">Solde actuel</span><span class="value grad" id="hSolde">— $</span></div></div>
+          <!-- Somme de tous les dépôts, affichée en vert -->
           <div class="card"><div class="stat"><span class="label">Total déposé</span><span class="value" id="hDepots" style="color:var(--success)">— $</span></div></div>
+          <!-- Somme de tous les retraits, affichée en rouge -->
           <div class="card"><div class="stat"><span class="label">Total retiré</span><span class="value" id="hRetraits" style="color:var(--danger)">— $</span></div></div>
         </div>
 
+        <!-- Conteneur du tableau des transactions (défilement horizontal sur mobile) -->
         <div class="table-wrap">
           <table>
+            <!-- En-têtes des colonnes -->
             <thead><tr><th>Type</th><th>Montant</th><th>Date</th></tr></thead>
+            <!-- Lignes des transactions remplies dynamiquement par historique.js -->
             <tbody id="tableau"></tbody>
           </table>
         </div>
@@ -41,8 +62,11 @@
     </section>
   </main>
 
+  <!-- Emplacement du footer, rempli automatiquement par app.js -->
   <div id="footer"></div>
+  <!-- Fonctions communes (header, footer, API, utilitaires) -->
   <script src="js/app.js"></script>
+  <!-- Logique propre à la page Historique (chargement des transactions et statistiques) -->
   <script src="js/historique.js"></script>
 </body>
 </html>

@@ -1,3 +1,9 @@
+# Framework web qui me sert à créer l'API (les routes /api/comptes, etc.)
 flask==3.0.3
+
+# Connecteur qui permet à mon application Python de communiquer avec la base de données MySQL
 mysql-connector-python==8.4.0
+
+# Serveur de production qui lance mon application Flask dans le conteneur
+# (utilisé dans la commande CMD du Dockerfile à la place du serveur de développement de Flask)
 gunicorn==22.0.0

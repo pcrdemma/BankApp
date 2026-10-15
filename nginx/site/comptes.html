@@ -1,32 +1,49 @@
+<!-- Déclaration du type de document HTML5 -->
 <!DOCTYPE html>
+<!-- Page en français -->
 <html lang="fr">
 <head>
+  <!-- Encodage UTF-8 pour les accents et emojis -->
   <meta charset="UTF-8">
+  <!-- Adaptation de la page aux écrans mobiles -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Titre de l'onglet du navigateur -->
   <title>NovaBank — Comptes</title>
+  <!-- Feuille de style du site -->
   <link rel="stylesheet" href="css/style.css">
 </head>
+<!-- Identifie la page "comptes" pour mettre le bon lien en surbrillance dans le menu -->
 <body data-page="comptes">
+  <!-- Emplacement du header, rempli automatiquement par app.js -->
   <div id="header"></div>
 
   <main>
+    <!-- Bandeau de titre de la page -->
     <div class="page-banner">
       <div class="container">
+        <!-- Fil d'Ariane pour revenir à l'accueil -->
         <div class="breadcrumb"><a href="index.html">Accueil</a> / Comptes</div>
         <h2>Gestion des comptes</h2>
         <p class="muted">Créez, consultez et supprimez vos comptes bancaires.</p>
       </div>
     </div>
 
+    <!-- Section principale : barre d'outils et tableau des comptes -->
     <section class="section" style="padding-top:40px">
       <div class="container">
+        <!-- Barre d'outils : champ de recherche et bouton de création -->
         <div class="toolbar">
+          <!-- Champ de recherche, filtré en temps réel par comptes.js -->
           <input class="input search" id="recherche" placeholder="🔎 Rechercher un titulaire...">
+          <!-- Ouvre la fenêtre modale de création de compte -->
           <button class="btn btn-primary" onclick="openModal('modalCreer')">+ Nouveau compte</button>
         </div>
+        <!-- Conteneur du tableau (défilement horizontal sur mobile) -->
         <div class="table-wrap">
           <table>
+            <!-- En-têtes des colonnes -->
             <thead><tr><th>Titulaire</th><th>N° compte</th><th>Solde</th><th>Ouvert le</th><th style="text-align:right">Actions</th></tr></thead>
+            <!-- Lignes remplies dynamiquement par comptes.js -->
             <tbody id="tableau"></tbody>
           </table>
         </div>
@@ -34,34 +51,44 @@
     </section>
   </main>
 
-  <!-- Modal création -->
+  <!-- Fenêtre modale de création d'un compte (cachée par défaut) -->
   <div class="modal-bg" id="modalCreer">
     <div class="modal">
       <h3>Ouvrir un compte</h3>
       <p class="muted" style="margin-bottom:20px">Renseignez les informations du titulaire.</p>
+      <!-- Champ du nom du titulaire -->
       <div class="field"><label>Nom du titulaire</label><input class="input" id="titulaire" placeholder="Ex. : Alice Tremblay"></div>
+      <!-- Champ du solde initial, numérique et non négatif -->
       <div class="field"><label>Solde initial</label><div class="input-money"><input class="input" id="solde" type="number" min="0" step="0.01" value="0"></div></div>
       <div class="modal-actions">
+        <!-- Ferme la modale sans rien créer -->
         <button class="btn btn-ghost" onclick="closeModal('modalCreer')">Annuler</button>
+        <!-- Envoie les données à l'API pour créer le compte -->
         <button class="btn btn-primary" onclick="creer()">Créer le compte</button>
       </div>
     </div>
   </div>
 
-  <!-- Modal suppression -->
+  <!-- Fenêtre modale de confirmation de suppression (cachée par défaut) -->
   <div class="modal-bg" id="modalSuppr">
     <div class="modal">
       <h3>Supprimer ce compte ?</h3>
+      <!-- Texte rempli dynamiquement avec le nom et le solde du compte concerné -->
       <p class="muted" style="margin:8px 0 22px" id="supprTexte"></p>
       <div class="modal-actions">
+        <!-- Annule la suppression -->
         <button class="btn btn-ghost" onclick="closeModal('modalSuppr')">Annuler</button>
+        <!-- Confirme et supprime le compte via l'API -->
         <button class="btn btn-danger" onclick="confirmerSuppr()">Oui, supprimer</button>
       </div>
     </div>
   </div>
 
+  <!-- Emplacement du footer, rempli automatiquement par app.js -->
   <div id="footer"></div>
+  <!-- Fonctions communes (header, footer, API, utilitaires) -->
   <script src="js/app.js"></script>
+  <!-- Logique propre à la page Comptes (liste, création, suppression) -->
   <script src="js/comptes.js"></script>
 </body>
 </html>
