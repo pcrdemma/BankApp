@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NovaBank — Historique</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="historique">
+  <div id="header"></div>
+
+  <main>
+    <div class="page-banner">
+      <div class="container">
+        <div class="breadcrumb"><a href="index.html">Accueil</a> / Historique</div>
+        <h2>Historique des transactions</h2>
+        <p class="muted">Consultez toutes les opérations d'un compte.</p>
+      </div>
+    </div>
+
+    <section class="section" style="padding-top:40px">
+      <div class="container">
+        <div class="toolbar">
+          <select class="input search" id="compteSel"></select>
+          <a class="btn btn-primary" id="lienOperer" href="operations.html">Faire une opération</a>
+        </div>
+
+        <div class="grid grid-3" style="margin-bottom:26px">
+          <div class="card"><div class="stat"><span class="label">Solde actuel</span><span class="value grad" id="hSolde">— $</span></div></div>
+          <div class="card"><div class="stat"><span class="label">Total déposé</span><span class="value" id="hDepots" style="color:var(--success)">— $</span></div></div>
+          <div class="card"><div class="stat"><span class="label">Total retiré</span><span class="value" id="hRetraits" style="color:var(--danger)">— $</span></div></div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Type</th><th>Montant</th><th>Date</th></tr></thead>
+            <tbody id="tableau"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="footer"></div>
+  <script src="js/app.js"></script>
+  <script src="js/historique.js"></script>
+</body>
+</html>

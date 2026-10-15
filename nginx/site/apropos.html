@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NovaBank — Architecture</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="apropos">
+  <div id="header"></div>
+
+  <main>
+    <div class="page-banner">
+      <div class="container">
+        <div class="breadcrumb"><a href="index.html">Accueil</a> / Architecture</div>
+        <h2>Architecture technique</h2>
+        <p class="muted">Trois conteneurs Docker orchestrés par Docker Compose.</p>
+      </div>
+    </div>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head reveal">
+          <h2>Flux d'une requête</h2>
+          <p>Le navigateur ne parle qu'à Nginx, qui redirige les appels API vers Flask, lequel interroge MySQL.</p>
+        </div>
+        <div class="flow reveal">
+          <div class="node"><span class="em">🌐</span><b>Navigateur</b><small>HTML / CSS / JS</small></div>
+          <div class="arrow">→</div>
+          <div class="node"><span class="em">⚡</span><b>Nginx</b><small>Port 80 · Proxy</small></div>
+          <div class="arrow">→</div>
+          <div class="node"><span class="em">🐍</span><b>Flask API</b><small>Port 5000 · Gunicorn</small></div>
+          <div class="arrow">→</div>
+          <div class="node"><span class="em">🐬</span><b>MySQL</b><small>Port 3306 · Volume</small></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0">
+      <div class="container">
+        <div class="grid grid-3">
+          <div class="card reveal"><div class="card-icon">⚡</div><h3>Conteneur Nginx</h3><p>Sert les pages statiques et agit comme reverse proxy : toute requête <code>/api/</code> est transmise au conteneur Flask.</p></div>
+          <div class="card reveal"><div class="card-icon">🐍</div><h3>Conteneur Flask</h3><p>API REST qui implémente les 5 fonctions bancaires et communique avec MySQL par le réseau Docker.</p></div>
+          <div class="card reveal"><div class="card-icon">🐬</div><h3>Conteneur MySQL</h3><p>Stocke comptes et transactions. Un volume nommé garantit la persistance des données.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0">
+      <div class="container">
+        <div class="section-head reveal"><h2>Points d'accès de l'API</h2></div>
+        <div class="table-wrap reveal">
+          <table>
+            <thead><tr><th>Fonction</th><th>Méthode</th><th>Route</th></tr></thead>
+            <tbody>
+              <tr><td><b>creerCompte</b></td><td><span class="pill depot">POST</span></td><td><code>/api/comptes</code></td></tr>
+              <tr><td><b>consulterCompte</b></td><td><span class="pill" style="background:var(--primary-soft);color:var(--primary)">GET</span></td><td><code>/api/comptes/{id}</code></td></tr>
+              <tr><td><b>deposerArgent</b></td><td><span class="pill depot">POST</span></td><td><code>/api/comptes/{id}/depot</code></td></tr>
+              <tr><td><b>retirerArgent</b></td><td><span class="pill depot">POST</span></td><td><code>/api/comptes/{id}/retrait</code></td></tr>
+              <tr><td><b>effacerCompte</b></td><td><span class="pill retrait">DELETE</span></td><td><code>/api/comptes/{id}</code></td></tr>
+              <tr><td><b>historique</b></td><td><span class="pill" style="background:var(--primary-soft);color:var(--primary)">GET</span></td><td><code>/api/comptes/{id}/historique</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0">
+      <div class="container">
+        <div class="section-head reveal"><h2>Déploiement</h2></div>
+        <pre class="code reveal">docker compose up -d --build
+docker compose ps
+docker compose push</pre>
+      </div>
+    </section>
+  </main>
+
+  <div id="footer"></div>
+  <script src="js/app.js"></script>
+</body>
+</html>

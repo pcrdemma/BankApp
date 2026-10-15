@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NovaBank — Comptes</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="comptes">
+  <div id="header"></div>
+
+  <main>
+    <div class="page-banner">
+      <div class="container">
+        <div class="breadcrumb"><a href="index.html">Accueil</a> / Comptes</div>
+        <h2>Gestion des comptes</h2>
+        <p class="muted">Créez, consultez et supprimez vos comptes bancaires.</p>
+      </div>
+    </div>
+
+    <section class="section" style="padding-top:40px">
+      <div class="container">
+        <div class="toolbar">
+          <input class="input search" id="recherche" placeholder="🔎 Rechercher un titulaire...">
+          <button class="btn btn-primary" onclick="openModal('modalCreer')">+ Nouveau compte</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Titulaire</th><th>N° compte</th><th>Solde</th><th>Ouvert le</th><th style="text-align:right">Actions</th></tr></thead>
+            <tbody id="tableau"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal création -->
+  <div class="modal-bg" id="modalCreer">
+    <div class="modal">
+      <h3>Ouvrir un compte</h3>
+      <p class="muted" style="margin-bottom:20px">Renseignez les informations du titulaire.</p>
+      <div class="field"><label>Nom du titulaire</label><input class="input" id="titulaire" placeholder="Ex. : Alice Tremblay"></div>
+      <div class="field"><label>Solde initial</label><div class="input-money"><input class="input" id="solde" type="number" min="0" step="0.01" value="0"></div></div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="closeModal('modalCreer')">Annuler</button>
+        <button class="btn btn-primary" onclick="creer()">Créer le compte</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal suppression -->
+  <div class="modal-bg" id="modalSuppr">
+    <div class="modal">
+      <h3>Supprimer ce compte ?</h3>
+      <p class="muted" style="margin:8px 0 22px" id="supprTexte"></p>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="closeModal('modalSuppr')">Annuler</button>
+        <button class="btn btn-danger" onclick="confirmerSuppr()">Oui, supprimer</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="footer"></div>
+  <script src="js/app.js"></script>
+  <script src="js/comptes.js"></script>
+</body>
+</html>
