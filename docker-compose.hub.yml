@@ -1,0 +1,63 @@
+# ============================================================
+# NovaBank - Version "Docker Hub"
+# Télécharge les images publiées sur Docker Hub (pas de build).
+# Usage : docker compose -f docker-compose.hub.yml up -d
+# ============================================================
+
+services:
+  # Base de données MySQL
+  # Le script db/init.sql est exécuté automatiquement au premier démarrage
+  # et crée la base "banque" ainsi que la table "comptes".
+  db:
+    image: mysql:8.0
+    container_name: banque-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      # Vérifie que MySQL répond avant de démarrer l'API
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${DB_ROOT_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    networks:
+      - banque-net
+
+  # API Flask (image publiée sur Docker Hub)
+  api:
+    image: empcrd/banque-api:1.0
+    container_name: banque-api
+    restart: unless-stopped
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: ${DB_ROOT_PASSWORD}
+      DB_NAME: ${DB_NAME}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - banque-net
+
+  # Interface web Nginx (image publiée sur Docker Hub)
+  # Nginx sert le site et redirige /api/ vers l'API Flask.
+  web:
+    image: empcrd/banque-nginx:1.0
+    container_name: banque-web
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+    networks:
+      - banque-net
+
+networks:
+  banque-net:
+
+volumes:
+  mysql_data:
